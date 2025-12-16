@@ -1,30 +1,40 @@
 #pragma once
 
+#include <stddef.h>
+
 typedef enum {
-    MODE_NONE,
+    MODE_NONE = 0,
     MODE_GENERATE,
     MODE_SORT,
     MODE_PRINT
-} mode_t;
+} program_mode_t;
 
 typedef enum {
-    SORT_ASC,
-    SORT_DESC
-} sort_type_t;
-
-typedef enum {
-    SORT_BY_YEAR,
-    SORT_BY_CITATIONS
+    SORT_FIELD_NONE = 0,
+    SORT_FIELD_YEAR,
+    SORT_FIELD_CITATIONS
 } sort_field_t;
 
+typedef enum {
+    SORT_ORDER_NONE = 0,
+    SORT_ORDER_ASC,
+    SORT_ORDER_DESC
+} sort_order_t;
+
 typedef struct {
-    mode_t mode;
-    sort_type_t sort_type;
-    sort_field_t sort_field;
-    int generate_count;
+    program_mode_t mode;
+
     char* input_file;
     char* output_file;
-    char* surnames_file;
-    char* words_file;
-    char* initials_file;
+
+    size_t generate_count;
+
+    sort_field_t sort_field;
+    sort_order_t sort_order;
 } program_args_t;
+
+void args_init(program_args_t* args);
+
+void args_free(program_args_t* args);
+
+int parse_args(int argc, char* argv[], program_args_t* args);
