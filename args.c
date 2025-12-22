@@ -1,30 +1,20 @@
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "args.h"
 
-void args_init(program_args_t* args) {
-    if (args == NULL) {
-        return;
+static int set_mode(const char* arg, mode_t* mode) {
+    if (strcmp(arg, "--generate") == 0 || strcmp(arg, "-g") == 0) {
+        *mode = MODE_GENERATE;
+        return 1;
     }
-
-    args->mode = MODE_NONE;
-
-    args->input_file = NULL;
-    args->output_file = NULL;
-
-    args->generate_count = 0;
-
-    args->sort_field = SORT_FIELD_NONE;
-    args->sort_order = SORT_ORDER_NONE;
-}
-
-void args_free(program_args_t* args) {
-    if (args == NULL) {
-        return;
+    if (strcmp(arg, "--sort") == 0 || strcmp(arg, "-s") == 0) {
+        *mode = MODE_SORT;
+        return 1;
     }
-
-    free(args->input_file);
-    free(args->output_file);
-
-    args->input_file = NULL;
-    args->output_file = NULL;
+    if (strcmp(arg, "--print") == 0 || strcmp(arg, "-P") == 0) {
+        *mode = MODE_PRINT;
+        return 1;
+    }
+    return 0;
 }
