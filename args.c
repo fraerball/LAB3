@@ -3,7 +3,7 @@
 #include <string.h>
 #include "args.h"
 
-static int set_mode(const char* arg, mode_t* mode) {
+static int set_mode(const char* arg, mode_t* mode){
     if (strcmp(arg, "--generate") == 0 || strcmp(arg, "-g") == 0){
         *mode = MODE_GENERATE;
         return 1;
@@ -29,4 +29,14 @@ static int set_sort_type(const char* arg, sort_type_t* type){
         return 1;
     }
     return 0;
+}
+static int set_sort_view(const char* arg, sort_view_t* view){
+    if (strcmp(arg, "year") == 0 || strcmp(arg, "y") == 0) {
+        *view = SORT_YEAR;
+        return 1;
+    }   
+     if (strcmp(arg, "citations") == 0 || strcmp(arg, "c") == 0) {
+        *view = SORT_CITATIONS;
+        return 1;
+    }   
 }
