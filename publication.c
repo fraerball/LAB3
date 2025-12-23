@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-static char* safe_strdup(const char* str) {
+static char* copy_string(const char* str) {
     if (!str) return NULL;
     char* new_str = malloc(strlen(str) + 1);
     if (new_str) {
@@ -14,30 +14,30 @@ static char* safe_strdup(const char* str) {
 int publication_copy(publication_t* dest, const publication_t* src) {
     if (!src || !dest) return 0;
     
-    dest->title = safe_strdup(src->title);
-    dest->author_surname = safe_strdup(src->author_surname);
-    dest->author_initials = safe_strdup(src->author_initials);
-    dest->journal_name = safe_strdup(src->journal_name);
+    dest->title_publication = copy_string(src->title_publication);
+    dest->author_surname = copy_string(src->author_surname);
+    dest->author_initials = copy_string(src->author_initials);
+    dest->title_journal = copy_string(src->title_journal);
     
     dest->publication_year = src->publication_year;
     dest->journal_volume = src->journal_volume;
     dest->is_rinz = src->is_rinz;
-    dest->page_count = src->page_count;
-    dest->citation_count = src->citation_count;
+    dest->page_quantity = src->page_quantity;
+    dest->citation_quantity = src->citation_quantity;
     
     return 1;
 }
 
-void publication_free(publication_t* pub) {
-    if (!pub) return;
+void publication_free(publication_t* publication) {
+    if (!publication) return;
     
-    free(pub->title);
-    free(pub->author_surname);
-    free(pub->author_initials);
-    free(pub->journal_name);
+    free(publication->title_publication);
+    free(publication->author_surname);
+    free(publication->author_initials);
+    free(publication->title_journal);
     
-    pub->title = NULL;
-    pub->author_surname = NULL;
-    pub->author_initials = NULL;
-    pub->journal_name = NULL;
+    publication->title_publication = NULL;
+    publication->author_surname = NULL;
+    publication->author_initials = NULL;
+    publication->title_journal = NULL;
 }
