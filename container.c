@@ -148,3 +148,9 @@ int container_swap(container_t* container, size_t index1, size_t index2){
     
     return result;
 }
+size_t container_size(const container_t* container) {
+    if (container == NULL) {
+        return 0;
+    }
+    return container->size;
+}
