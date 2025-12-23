@@ -26,7 +26,7 @@ container_t* container_init(){
 }
 
 void container_destroy(container_t* container){
-    if (container == NULL) return NULL;
+    if (container = NULL) return;
     
     container_clear(container);
     free(container);
