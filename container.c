@@ -130,3 +130,21 @@ int container_remove(container_t* container, size_t index){
     container_destroy(temp_container);
     return 1;
 }
+
+int container_swap(container_t* container, size_t index1, size_t index2){
+    if (container == NULL || index1 >= container->size || index2 >= container->size) return 0;
+    
+    if (index1 == index2) return 1;
+    
+    publication_t publication1 , publication2;
+    if (container_get(container, index1, &publication1) == 0 || container_get(container, index2, &publication2) == 0){
+        return 0;
+    }
+    
+    int result = container_set(container, index1, &publication2) && container_set(container, index2, &publication1);
+    
+    publication_free(&publication1);
+    publication_free(&publication2);
+    
+    return result;
+}
