@@ -17,3 +17,8 @@ typedef struct {
 
 int publication_copy(publication_t* dest, const publication_t* src);
 void publication_free(publication_t* publication);
+
+int cmp_year_asc(const void* value1, const void* value2);
+int cmp_year_desc(const void* value1, const void* value2);
+int cmp_cit_asc(const void* value1, const void* value2);
+int cmp_cit_desc(const void* value1, const void* value2);
