@@ -97,3 +97,36 @@ int container_paste(container_t* container, size_t index, const publication_t* d
     container_destroy(temp_container);
     return 1;
 }
+
+int container_remove(container_t* container, size_t index){
+    if (container == NULL || index >= container->size) return 0;
+    
+    if (index == container->size - 1){
+        return container_pop(container);
+    }
+    
+    container_t* temp_container = container_init();
+    if (temp_container == NULL) return 0;
+    
+    for (size_t i = container->size - 1; i > index; i--) {
+        publication_t temp_publication;
+        if (container_get(container, i, &temp_publication)) {
+            container_push(temp_container, &temp_publication);
+            publication_free(&temp_publication);
+        }
+    }
+    
+    container_pop(container);
+    
+    while (container_size(temp_container) > 0) {
+        publication_t temp_publication;
+        if (container_get(temp_container, 0, &temp_publication)) {
+            container_push(container, &temp_publication);
+            container_pop(temp_container);
+            publication_free(&temp_publication);
+        }
+    }
+    
+    container_destroy(temp_container);
+    return 1;
+}
