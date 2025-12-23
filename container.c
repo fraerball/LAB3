@@ -43,3 +43,14 @@ int container_pop(container_t* container){
     
     return 1;
 }
+int container_push(container_t* container, const publication_t* data){
+    if (container == NULL || data == NULL) return 0;
+    
+    stack_node_t* new_node = malloc(sizeof(stack_node_t));
+    if (new_node == NULL) return 0;
+    
+    if (publication_copy(&new_node->data, data) == 0){
+        free(new_node);
+        return 0;
+    }
+}
