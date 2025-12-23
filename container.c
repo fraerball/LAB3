@@ -65,7 +65,7 @@ void container_clear(container_t* container){
 int container_paste(container_t* container, size_t index, const publication_t* data){
     if (container == NULL || data == NULL|| index > container->size) return 0;
     
-    if (index == container->size) {
+    if (index == container->size){
         return container_push(container, data);
     }
 
@@ -148,9 +148,26 @@ int container_swap(container_t* container, size_t index1, size_t index2){
     
     return result;
 }
-size_t container_size(const container_t* container) {
+size_t container_size(const container_t* container){
     if (container == NULL) {
         return 0;
     }
     return container->size;
+}
+int container_get(const container_t* container, size_t index, publication_t* result){
+    if (container == NULL || result == NULL || index >= container->size) return 0;
+    
+    stack_node_t* node = get_node_index(container, index);
+    if (node == NULL) return 0;
+    
+    return publication_copy(result, &node->data);
+}
+static stack_node_t* get_node_index(const container_t* container, size_t index){
+    if (index >= container->size) return NULL;
+    
+    stack_node_t* current = container->top;
+    for (size_t i = 0; i < container->size - index - 1; i++) {
+        current = current->next;
+    }
+    return current;
 }
