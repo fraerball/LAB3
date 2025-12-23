@@ -58,7 +58,7 @@ int container_push(container_t* container, const publication_t* data){
 void container_clear(container_t* container){
     if (container == NULL) return;
     
-    while (container->top) {
+    while (container->top){
         container_pop(container);
     }
 }
@@ -108,9 +108,9 @@ int container_remove(container_t* container, size_t index){
     container_t* temp_container = container_init();
     if (temp_container == NULL) return 0;
     
-    for (size_t i = container->size - 1; i > index; i--) {
+    for (size_t i = container->size - 1; i > index; i--){
         publication_t temp_publication;
-        if (container_get(container, i, &temp_publication)) {
+        if (container_get(container, i, &temp_publication)){
             container_push(temp_container, &temp_publication);
             publication_free(&temp_publication);
         }
@@ -118,9 +118,9 @@ int container_remove(container_t* container, size_t index){
     
     container_pop(container);
     
-    while (container_size(temp_container) > 0) {
+    while (container_size(temp_container) > 0){
         publication_t temp_publication;
-        if (container_get(temp_container, 0, &temp_publication)) {
+        if (container_get(temp_container, 0, &temp_publication)){
             container_push(container, &temp_publication);
             container_pop(temp_container);
             publication_free(&temp_publication);
