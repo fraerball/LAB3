@@ -54,3 +54,11 @@ int container_push(container_t* container, const publication_t* data){
         return 0;
     }
 }
+
+void container_clear(container_t* container){
+    if (container == NULL) return;
+    
+    while (container->top) {
+        container_pop(container);
+    }
+}
