@@ -141,7 +141,7 @@ int container_swap(container_t* container, size_t index1, size_t index2){
         return 0;
     }
     
-    int result = container_set(container, index1, &publication2) && container_set(container, index2, &publication1);
+    int result = container_update(container, index1, &publication2) && container_update(container, index2, &publication1);
     
     publication_free(&publication1);
     publication_free(&publication2);
@@ -170,4 +170,13 @@ static stack_node_t* get_node_index(const container_t* container, size_t index){
         current = current->next;
     }
     return current;
+}
+int container_update(container_t* container, size_t index, const publication_t* data){
+    if (!container || !data || index >= container->size) return 0;
+    
+    stack_node_t* node = get_node_index(container, index);
+    if (!node) return 0;
+    
+    publication_free(&node->data);
+    return publication_copy(&node->data, data);
 }
