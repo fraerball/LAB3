@@ -15,3 +15,12 @@ struct container_iterator {
     stack_node_t* current;
     size_t position;
 };
+
+container_t* container_init() {
+    container_t* container = malloc(sizeof(container_t));
+    if (container == NULL) return NULL;
+    
+    container->top = NULL;
+    container->size = 0;
+    return container;
+}
