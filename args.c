@@ -35,7 +35,7 @@ static int set_sort_view(const char* arg, sort_view_t* view){
         *view = SORT_YEAR;
         return 1;
     }   
-     if (strcmp(arg, "citations") == 0 || strcmp(arg, "c") == 0) {
+     if (strcmp(arg, "citations") == 0 || strcmp(arg, "c") == 0){
         *view = SORT_CITATIONS;
         return 1;
     }   
