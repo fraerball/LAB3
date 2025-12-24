@@ -5,6 +5,8 @@
 #include "container.h"
 #include "args.h"
 #include "sort.h"
+#include "io.h"
+#include "publication.h"
 
 static comparator_t choose_comparator(sort_type_t type, sort_view_t view){
     if (view == SORT_YEAR){
@@ -29,14 +31,14 @@ static comparator_t choose_comparator(sort_type_t type, sort_view_t view){
 
 int main(int argc, char* argp[]){
 
-        SetConsoleOutputCP(1251);
-    SetConsoleCP(1251);
+    SetConsoleOutputCP(65001);
+    SetConsoleCP(65001);
     setlocale(LC_ALL, "ru_RU.UTF-8");
 
         program_args_t args;
     
     if (!analysis_args(argc, argp, &args)) {
-        fprintf(stderr, "Ошибка разбора аргументов командной строки\n");
+        fprintf(stderr, "РћС€РёР±РєР° СЂР°Р·Р±РѕСЂР° Р°СЂРіСѓРјРµРЅС‚РѕРІ РєРѕРјР°РЅРґРЅРѕР№ СЃС‚СЂРѕРєРё\n");
         return 1;
     }
     
@@ -50,8 +52,8 @@ int main(int argc, char* argp[]){
     switch (args.mode) {
         case MODE_GENERATE:
             if (!args.surnames_file) {
-                fprintf(stderr, "Ошибка: Для режима генерации должен быть указан файл с фамилиями\n");
-                fprintf(stderr, "Используйте --surnames=ФАЙЛ или -S ФАЙЛ\n");
+                fprintf(stderr, "РћС€РёР±РєР°: Р”Р»СЏ СЂРµР¶РёРјР° РіРµРЅРµСЂР°С†РёРё РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ СѓРєР°Р·Р°РЅ С„Р°Р№Р» СЃ С„Р°РјРёР»РёСЏРјРё\n");
+                fprintf(stderr, "РСЃРїРѕР»СЊР·СѓР№С‚Рµ --surnames=Р¤РђР™Р› РёР»Рё -S Р¤РђР™Р›\n");
                 result = 1;
                 break;
             }
@@ -59,13 +61,13 @@ int main(int argc, char* argp[]){
             publications = generate_random_publications(args.generate_quantity, args.surnames_file,args.words_file,args.initials_file);
             
             if (!publications) {
-                fprintf(stderr, "Ошибка: Не удалось сгенерировать публикации\n");
+                fprintf(stderr, "РћС€РёР±РєР°: РќРµ СѓРґР°Р»РѕСЃСЊ СЃРіРµРЅРµСЂРёСЂРѕРІР°С‚СЊ РїСѓР±Р»РёРєР°С†РёРё\n");
                 result = 1;
                 break;
             }
             
             if (!write_publications_csv(publications, args.output_file)) {
-                fprintf(stderr, "Ошибка: Не удалось записать публикации\n");
+                fprintf(stderr, "РћС€РёР±РєР°: РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РїРёСЃР°С‚СЊ РїСѓР±Р»РёРєР°С†РёРё\n");
                 result = 1;
             }
             break;
@@ -73,7 +75,7 @@ int main(int argc, char* argp[]){
         case MODE_SORT:
             publications = read_publications_csv(args.input_file);
             if (!publications) {
-                fprintf(stderr, "Ошибка: Не удалось прочитать публикации\n");
+                fprintf(stderr, "РћС€РёР±РєР°: РќРµ СѓРґР°Р»РѕСЃСЊ РїСЂРѕС‡РёС‚Р°С‚СЊ РїСѓР±Р»РёРєР°С†РёРё\n");
                 result = 1;
                 break;
             }
@@ -81,7 +83,7 @@ int main(int argc, char* argp[]){
             sort(publications, choose_comparator(args.sort_type, args.sort_view));
             
             if (!write_publications_csv(publications, args.output_file)) {
-                fprintf(stderr, "Ошибка: Не удалось записать отсортированные публикации\n");
+                fprintf(stderr, "РћС€РёР±РєР°: РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РїРёСЃР°С‚СЊ РѕС‚СЃРѕСЂС‚РёСЂРѕРІР°РЅРЅС‹Рµ РїСѓР±Р»РёРєР°С†РёРё\n");
                 result = 1;
             }
             break;
@@ -89,13 +91,13 @@ int main(int argc, char* argp[]){
         case MODE_PRINT:
             publications = read_publications_csv(args.input_file);
             if (!publications) {
-                fprintf(stderr, "Ошибка: Не удалось прочитать публикации\n");
+                fprintf(stderr, "РћС€РёР±РєР°: РќРµ СѓРґР°Р»РѕСЃСЊ РїСЂРѕС‡РёС‚Р°С‚СЊ РїСѓР±Р»РёРєР°С†РёРё\n");
                 result = 1;
                 break;
             }
             
             if (!print_publications_table(publications, args.output_file)) {
-                fprintf(stderr, "Ошибка: Не удалось вывести таблицу публикаций\n");
+                fprintf(stderr, "РћС€РёР±РєР°: РќРµ СѓРґР°Р»РѕСЃСЊ РІС‹РІРµСЃС‚Рё С‚Р°Р±Р»РёС†Сѓ РїСѓР±Р»РёРєР°С†РёР№\n");
                 result = 1;
             }
             break;

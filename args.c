@@ -39,6 +39,7 @@ static int set_sort_view(const char* arg, sort_view_t* view){
         *view = SORT_CITATIONS;
         return 1;
     }   
+    return 0;
 }
 
 int analysis_args(int argc, char* argp[], program_args_t* args){
