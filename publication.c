@@ -41,3 +41,33 @@ void publication_free(publication_t* publication) {
     publication->author_initials = NULL;
     publication->title_journal = NULL;
 }
+
+int cmp_year_asc(const void* value1, const void* value2) {
+    const publication_t* publication1 = (const publication_t*)value1;
+    const publication_t* publication2 = (const publication_t*)value2;
+    
+    if (publication1->publication_year != publication2->publication_year) {
+        return publication1->publication_year - publication2->publication_year;
+    }
+    return publication1->citation_quantity - publication2->citation_quantity;
+}
+
+
+int cmp_year_desc(const void* value1, const void* value2){
+    return -cmp_year_asc(value1, value2);
+}
+
+
+int cmp_cit_asc(const void* value1, const void* value2){
+    const publication_t* publication1 = (const publication_t*)value1;
+    const publication_t* publication2 = (const publication_t*)value2;
+    
+    if (publication1->citation_quantity != publication2->citation_quantity) {
+        return publication1->citation_quantity - publication2->citation_quantity;
+    }
+    return publication1->publication_year - publication2->publication_year;
+}
+
+int cmp_cit_desc(const void* value1, const void* value2){
+    return -cmp_cit_asc(value1, value2);
+}
