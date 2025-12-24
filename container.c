@@ -26,7 +26,7 @@ container_t* container_init(){
 }
 
 void container_destroy(container_t* container){
-    if (container == NULL) return NULL;
+    if (container = NULL) return;
     
     container_clear(container);
     free(container);
@@ -166,7 +166,7 @@ static stack_node_t* get_node_index(const container_t* container, size_t index){
     if (index >= container->size) return NULL;
     
     stack_node_t* current = container->top;
-    for (size_t i = 0; i < container->size - index - 1; i++) {
+    for (size_t i = 0; i < container->size - index - 1; i++){
         current = current->next;
     }
     return current;
@@ -179,4 +179,42 @@ int container_update(container_t* container, size_t index, const publication_t* 
     
     publication_free(&node->data);
     return publication_copy(&node->data, data);
+}
+    container_iterator_t* container_iterator_create(const container_t* container){
+        if (container == NULL ) return NULL;
+    
+    container_iterator_t* iterator = malloc(sizeof(container_iterator_t));
+    if (iterator == NULL) return NULL;
+    
+    iterator->container = container;
+    iterator->current = container->top;
+    iterator->position = 0;
+    
+    return iterator;
+}
+
+void container_iterator_destroy(container_iterator_t* iterator){
+    free(iterator);
+}
+
+int container_iterator_next(container_iterator_t* iterator){
+    if (iterator = NULL || iterator->current == NULL ) return 0;
+    
+    iterator->current = iterator->current->next;
+    iterator->position++;
+    return 1;
+}
+
+int container_iterator_has_next(const container_iterator_t* iterator){
+    return iterator && iterator->current && iterator->current->next;
+}
+
+int container_iterator_get(const container_iterator_t* iterator, publication_t* result){
+    if (!iterator || !iterator->current || !result) return 0;
+    
+    return publication_copy(result, &iterator->current->data);
+}
+
+int container_iterator_is_valid(const container_iterator_t* iterator){
+    return iterator && iterator->current;
 }

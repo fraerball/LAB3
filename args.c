@@ -93,7 +93,7 @@ int analysis_args(int argc, char* argp[], program_args_t* args){
         else if (strcmp(argp[i], "-t") == 0 && i + 1 < argc){
             set_sort_type(argp[++i], &args->sort_type);
         }
-        else if (strncmp(argp[i], "--field=", 8) == 0){
+        else if (strncmp(argp[i], "--view=", 7) == 0){
             set_sort_view(argp[i] + 8, &args->sort_view);
         }
         else if (strcmp(argp[i], "-v") == 0 && i + 1 < argc){
