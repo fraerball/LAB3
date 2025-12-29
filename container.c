@@ -26,7 +26,7 @@ container_t* container_init(){
 }
 
 void container_destroy(container_t* container){
-    if (container = NULL) return;
+    if (container == NULL) return;
     
     container_clear(container);
     free(container);
@@ -45,14 +45,20 @@ int container_pop(container_t* container){
 }
 int container_push(container_t* container, const publication_t* data){
     if (container == NULL || data == NULL) return 0;
-    
+
     stack_node_t* new_node = malloc(sizeof(stack_node_t));
     if (new_node == NULL) return 0;
-    
-    if (publication_copy(&new_node->data, data) == 0){
+
+    if (!publication_copy(&new_node->data, data)){
         free(new_node);
         return 0;
     }
+
+    new_node->next = container->top;
+    container->top = new_node;
+    container->size++;
+
+    return 1;
 }
 
 void container_clear(container_t* container){
@@ -154,14 +160,6 @@ size_t container_size(const container_t* container){
     }
     return container->size;
 }
-int container_get(const container_t* container, size_t index, publication_t* result){
-    if (container == NULL || result == NULL || index >= container->size) return 0;
-    
-    stack_node_t* node = get_node_index(container, index);
-    if (node == NULL) return 0;
-    
-    return publication_copy(result, &node->data);
-}
 static stack_node_t* get_node_index(const container_t* container, size_t index){
     if (index >= container->size) return NULL;
     
@@ -170,6 +168,14 @@ static stack_node_t* get_node_index(const container_t* container, size_t index){
         current = current->next;
     }
     return current;
+}
+int container_get(const container_t* container, size_t index, publication_t* result){
+    if (container == NULL || result == NULL || index >= container->size) return 0;
+    
+    stack_node_t* node = get_node_index(container, index);
+    if (node == NULL) return 0;
+    
+    return publication_copy(result, &node->data);
 }
 int container_update(container_t* container, size_t index, const publication_t* data){
     if (!container || !data || index >= container->size) return 0;
@@ -198,7 +204,7 @@ void container_iterator_destroy(container_iterator_t* iterator){
 }
 
 int container_iterator_next(container_iterator_t* iterator){
-    if (iterator = NULL || iterator->current == NULL ) return 0;
+    if (iterator == NULL || iterator->current == NULL ) return 0;
     
     iterator->current = iterator->current->next;
     iterator->position++;

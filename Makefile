@@ -7,15 +7,15 @@ OBJ = $(SRC:.c=.o)
 all: $(TARGET)
 
 $(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(TARGET)
+	$(CC) $(CFLAGS) $(OBJ) -o $(TARGET).exe
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 run: $(TARGET)
-	./$(TARGET)
+	.\$(TARGET).exe
 
 clean:
-	rm -f $(OBJ) $(TARGET) *.csv
+	del /Q /F $(OBJ) $(TARGET).exe *.csv
 
 .PHONY: all clean run

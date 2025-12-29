@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
 
 
 static char** publications = NULL;
@@ -233,12 +234,12 @@ container_t* read_publications_csv(const char* filename) {
         memset(&publication, 0, sizeof(publication));
         
         char* token = strtok(line, ",");
-        int view = 0;
+        int field = 0;
         
-        while (token && view < 9) {
+        while (token && field < 9) {
             while (*token == ' ') token++;
             
-            switch (view) {
+            switch (field) {
                 case 0: publication.title_publication = copy_string(token); break;
                 case 1: publication.author_surname = copy_string(token); break;
                 case 2: publication.author_initials = copy_string(token); break;
@@ -253,10 +254,10 @@ container_t* read_publications_csv(const char* filename) {
             }
             
             token = strtok(NULL, ",");
-            view++;
+            field++;
         }
         
-        if (view == 9) {
+        if (field == 9) {
             if (!container_push(container, &publication)) {
                 fprintf(stderr, "Предупреждение: Не удалось добавить публикацию из строки %d\n", line_num);
             }
@@ -278,7 +279,7 @@ int write_publications_csv(const container_t* container, const char* filename) {
         return 0;
     }
     
-    fprintf(file, "название,аамилия_автора,инициалы_автора,название_журнала,год_публикации,номер_тома,в_ринц,количество_страниц,количество_цитирований\n");
+    fprintf(file, "название,фамилия_автора,инициалы_автора,название_журнала,год_публикации,номер_тома,в_ринц,количество_страниц,количество_цитирований\n");
     
     container_iterator_t* it = container_iterator_create(container);
     if (!it) {

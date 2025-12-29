@@ -35,10 +35,10 @@ static int set_sort_view(const char* arg, sort_view_t* view){
         *view = SORT_YEAR;
         return 1;
     }   
-     if (strcmp(arg, "citations") == 0 || strcmp(arg, "c") == 0){
+    if (strcmp(arg, "citations") == 0 || strcmp(arg, "c") == 0){
         *view = SORT_CITATIONS;
         return 1;
-    }   
+    }
     return 0;
 }
 
@@ -95,7 +95,7 @@ int analysis_args(int argc, char* argp[], program_args_t* args){
             set_sort_type(argp[++i], &args->sort_type);
         }
         else if (strncmp(argp[i], "--view=", 7) == 0){
-            set_sort_view(argp[i] + 8, &args->sort_view);
+            set_sort_view(argp[i] + 7, &args->sort_view);
         }
         else if (strcmp(argp[i], "-v") == 0 && i + 1 < argc){
             set_sort_view(argp[++i], &args->sort_view);
@@ -108,4 +108,5 @@ int analysis_args(int argc, char* argp[], program_args_t* args){
             return 0;
         }
     }
+    return 1;
 }

@@ -3,7 +3,7 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-typedef struct {
+typedef struct{
     char* title_publication;
     char* author_surname;
     char* author_initials;

@@ -1,41 +1,38 @@
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
 #include <locale.h>
 #include <windows.h>
-#include "container.h"
-#include "args.h"
-#include "sort.h"
-#include "io.h"
 #include "publication.h"
+#include "container.h"
+#include "sort.h"
+#include "args.h"
+#include "io.h"
+#include "args.h"
 
-static comparator_t choose_comparator(sort_type_t type, sort_view_t view){
-    if (view == SORT_YEAR){
-        if (type == SORT_ASC){
+static comparator_t get_comparator(sort_type_t type, sort_view_t view) {
+    if (view == SORT_YEAR) {
+        if (type == SORT_ASC) {
             return cmp_year_asc;
-        } else{
+        } else {
             return cmp_year_desc;
         }
-    } 
-    else if (view == SORT_CITATIONS){
-        if (type == SORT_ASC){
+    } else if (view == SORT_CITATIONS) {
+        if (type == SORT_ASC) {
             return cmp_cit_asc;
-        } else{
+        } else {
             return cmp_cit_desc;
         }
     }
-    else{
-        return cmp_year_asc;
-    }
+    return cmp_year_asc;
 }
-
 
 int main(int argc, char* argp[]){
 
     SetConsoleOutputCP(65001);
     SetConsoleCP(65001);
     setlocale(LC_ALL, "ru_RU.UTF-8");
-
-        program_args_t args;
+    
+    program_args_t args;
     
     if (!analysis_args(argc, argp, &args)) {
         fprintf(stderr, "Ошибка разбора аргументов командной строки\n");
@@ -80,7 +77,7 @@ int main(int argc, char* argp[]){
                 break;
             }
             
-            sort(publications, choose_comparator(args.sort_type, args.sort_view));
+            sort(publications, get_comparator(args.sort_type, args.sort_view));
             
             if (!write_publications_csv(publications, args.output_file)) {
                 fprintf(stderr, "Ошибка: Не удалось записать отсортированные публикации\n");
