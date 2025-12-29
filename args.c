@@ -4,15 +4,18 @@
 #include "args.h"
 
 static int set_mode(const char* arg, mode_t* mode){
-    if (strcmp(arg, "--generate") == 0 || strcmp(arg, "-g") == 0){
+    if (strncmp(arg, "--generate", strlen("--generate") + 1) == 0 ||
+        strncmp(arg, "-g",         strlen("-g") + 1) == 0){
         *mode = MODE_GENERATE;
         return 1;
     }
-    if (strcmp(arg, "--sort") == 0 || strcmp(arg, "-s") == 0){
+    if (strncmp(arg, "--sort", strlen("--sort") + 1) == 0 ||
+        strncmp(arg, "-s",    strlen("-s") + 1) == 0){
         *mode = MODE_SORT;
         return 1;
     }
-    if (strcmp(arg, "--print") == 0 || strcmp(arg, "-P") == 0){
+    if (strncmp(arg, "--print", strlen("--print") + 1) == 0 ||
+        strncmp(arg, "-P",     strlen("-P") + 1) == 0){
         *mode = MODE_PRINT;
         return 1;
     }
@@ -20,22 +23,27 @@ static int set_mode(const char* arg, mode_t* mode){
 }
 
 static int set_sort_type(const char* arg, sort_type_t* type){
-    if (strcmp(arg, "asc") == 0 || strcmp(arg, "A") == 0){
+    if (strncmp(arg, "asc", strlen("asc") + 1) == 0 ||
+        strncmp(arg, "A",   strlen("A") + 1) == 0){
         *type = SORT_ASC;
         return 1;
     }
-    if (strcmp(arg, "desc") == 0 || strcmp(arg, "D") == 0){
+    if (strncmp(arg, "desc", strlen("desc") + 1) == 0 ||
+        strncmp(arg, "D",    strlen("D") + 1) == 0){
         *type = SORT_DESC;
         return 1;
     }
     return 0;
 }
+
 static int set_sort_view(const char* arg, sort_view_t* view){
-    if (strcmp(arg, "year") == 0 || strcmp(arg, "y") == 0) {
+    if (strncmp(arg, "year", strlen("year") + 1) == 0 ||
+        strncmp(arg, "y",    strlen("y") + 1) == 0){
         *view = SORT_YEAR;
         return 1;
-    }   
-    if (strcmp(arg, "citations") == 0 || strcmp(arg, "c") == 0){
+    }
+    if (strncmp(arg, "citations", strlen("citations") + 1) == 0 ||
+        strncmp(arg, "c",         strlen("c") + 1) == 0){
         *view = SORT_CITATIONS;
         return 1;
     }
