@@ -42,71 +42,116 @@ static int set_sort_view(const char* arg, sort_view_t* view){
     return 0;
 }
 
-int analysis_args(int argc, char* argp[], program_args_t* args){
+static int set_sort_method(const char* arg, sort_method_t* method){
+    if (strncmp(arg, "shaker", strlen("shaker") + 1) == 0 ||
+        strncmp(arg, "s",      strlen("s") + 1) == 0){
+        *method = SORT_METHOD_SHAKER;
+        return 1;
+    }
+    if (strncmp(arg, "merge", strlen("merge") + 1) == 0 ||
+        strncmp(arg, "m",     strlen("m") + 1) == 0){
+        *method = SORT_METHOD_MERGE;
+        return 1;
+    }
+    return 0;
+}
+
+int analysis_args(int argq, char* argp[], program_args_t* args){
+    if (args == NULL) return 0;
 
     args->mode = MODE_NONE;
+    
     args->sort_type = SORT_ASC;
     args->sort_view = SORT_YEAR;
+    args->sort_method = SORT_METHOD_SHAKER;
+
     args->generate_quantity = 0;
+    
     args->input_file = NULL;
     args->output_file = NULL;
     args->surnames_file = NULL;
     args->words_file = NULL;
     args->initials_file = NULL;
     
-    for (int i = 1; i < argc; i++){
+    for (int i = 1; i < argq; i++){
         if (set_mode(argp[i], &args->mode)){
             continue;
         }
         if (strncmp(argp[i], "--in=", 5) == 0){
             args->input_file = argp[i] + 5;
         }
-        else if (strcmp(argp[i], "-i") == 0 && i + 1 < argc){
+        else if (strncmp(argp[i], "-i", strlen("-i") + 1) == 0 && i + 1 < argq){
             args->input_file = argp[++i];
         }
         else if (strncmp(argp[i], "--out=", 6) == 0){
             args->output_file = argp[i] + 6;
         }
-        else if (strcmp(argp[i], "-o") == 0 && i + 1 < argc){
+        else if (strncmp(argp[i], "-o", strlen("-o") + 1) == 0 && i + 1 < argq){
             args->output_file = argp[++i];
         }
         else if (strncmp(argp[i], "--surnames=", 11) == 0){
             args->surnames_file = argp[i] + 11;
         }
-        else if (strcmp(argp[i], "-S") == 0 && i + 1 < argc){
+        else if (strncmp(argp[i], "-S", strlen("-S") + 1) == 0 && i + 1 < argq){
             args->surnames_file = argp[++i];
         }
         else if (strncmp(argp[i], "--words=", 8) == 0){
             args->words_file = argp[i] + 8;
         }
-        else if (strcmp(argp[i], "-w") == 0 && i + 1 < argc){
+        else if (strncmp(argp[i], "-w", strlen("-w") + 1) == 0 && i + 1 < argq){
             args->words_file = argp[++i];
         }
         else if (strncmp(argp[i], "--initials=", 11) == 0){
             args->initials_file = argp[i] + 11;
         }
-        else if (strcmp(argp[i], "-I") == 0 && i + 1 < argc){
+        else if (strncmp(argp[i], "-I", strlen("-I") + 1) == 0 && i + 1 < argq){
             args->initials_file = argp[++i];
         }
+
         else if (strncmp(argp[i], "--type=", 7) == 0){
-            set_sort_type(argp[i] + 7, &args->sort_type);
+            if (set_sort_type(argp[i] + 7, &args->sort_type) == 0){
+                puts( "Ошибка: неверный --type= (нужно asc/desc)\n");
+                return 0;
+            }
         }
-        else if (strcmp(argp[i], "-t") == 0 && i + 1 < argc){
-            set_sort_type(argp[++i], &args->sort_type);
+        else if (strncmp(argp[i], "-t", strlen("-t") + 1) == 0 && i + 1 < argq){
+            if (set_sort_type(argp[++i], &args->sort_type) == 0){
+                puts( "Ошибка: неверный -t (нужно asc/desc)\n");
+                return 0;
+            }
         }
         else if (strncmp(argp[i], "--view=", 7) == 0){
-            set_sort_view(argp[i] + 7, &args->sort_view);
+            if (set_sort_view(argp[i] + 7, &args->sort_view) == 0){
+                puts( "Ошибка: неверный --view= (нужно year/citations)\n");
+                return 0;
+            }
         }
-        else if (strcmp(argp[i], "-v") == 0 && i + 1 < argc){
-            set_sort_view(argp[++i], &args->sort_view);
+        else if (strncmp(argp[i], "-v", strlen("-v") + 1) == 0 && i + 1 < argq){
+            if (set_sort_view(argp[++i], &args->sort_view) == 0){
+                puts( "Ошибка: неверный -v (нужно year/citations)\n");
+                return 0;
+            }
+        }
+        else if (strncmp(argp[i], "--method=", 9) == 0){
+            if (set_sort_method(argp[i] + 9, &args->sort_method) == 0){
+                puts( "Ошибка: неверный --method= (нужно shaker/merge)\n");
+                return 0;
+            }
+        }
+        else if (strncmp(argp[i], "-m", strlen("-m") + 1) == 0 && i + 1 < argq){
+            if (set_sort_method(argp[++i], &args->sort_method) == 0){
+                puts( "Ошибка: неверный -m (нужно shaker/merge)\n");
+                return 0;
+            }
         }
         else if (args->mode == MODE_GENERATE && args->generate_quantity == 0){
             args->generate_quantity = atoi(argp[i]);
         }
         else {
-            fprintf(stderr, "Ошибка: %s\n", argp[i]);
+            puts( "Ошибка\n");
             return 0;
         }
     }
+
     return 1;
 }
