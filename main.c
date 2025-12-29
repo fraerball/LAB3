@@ -7,7 +7,6 @@
 #include "sort.h"
 #include "args.h"
 #include "io.h"
-#include "args.h"
 
 static comparator_t get_comparator(sort_type_t type, sort_view_t view) {
     if (view == SORT_YEAR) {
