@@ -1,17 +1,18 @@
 #pragma once
 
 #include <stddef.h>
+#include "sort.h"
 
 typedef enum{
     MODE_NONE,
     MODE_GENERATE,
     MODE_SORT,
-    MODE_PRINT
+    MODE_PRINT,
 } mode_t;
 
 typedef enum{
     SORT_YEAR,
-    SORT_CITATIONS
+    SORT_CITATIONS,
 } sort_view_t;
 
 typedef enum{
@@ -21,14 +22,19 @@ typedef enum{
 
 typedef struct{
     mode_t mode;
+
     sort_type_t sort_type;
     sort_view_t sort_view;
+    sort_method_t sort_method;
+
     int generate_quantity;
+
     char* input_file;
     char* output_file;
+
     char* surnames_file;
     char* words_file;
     char* initials_file;
 } program_args_t;
 
-int analysis_args(int argc, char* argp[], program_args_t* args);
+int analysis_args(int argq, char* argp[], program_args_t* args);
