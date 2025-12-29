@@ -6,4 +6,9 @@ typedef struct container container_t;
 
 typedef int (*comparator_t)(const void* publiication1, const void* publication2);
 
+typedef enum{
+    SORT_METHOD_SHAKER,
+    SORT_METHOD_MERGE,
+}sort_method_t;
+
 void sort(container_t* container, comparator_t cmp);
