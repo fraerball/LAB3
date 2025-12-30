@@ -166,3 +166,138 @@ static void sort_stack_shaker(container_t* stack, comparator_t cmp){
     container_destroy(rev);
     container_destroy(tmp);
 }
+static int merge_into_one(container_t* stack, container_t* left, container_t* right, comparator_t cmp){
+    if (stack == NULL || left == NULL || right == NULL || cmp == NULL){
+        return 0;
+    }
+
+    container_t* temp = container_init();
+    if (temp == NULL){
+        return 0;
+    }
+
+    while (container_size(left) > 0 || container_size(right) > 0){
+        int take_left = 0;
+
+        if (container_size(right) == 0){
+            take_left = 1;
+        } else if (container_size(left) == 0){
+            take_left = 0;
+        } else {
+            publication_t pub1;
+            publication_t pub2;
+
+            if (stack_peek(left, &pub1) == 0){
+                container_destroy(temp);
+                return 0;
+            }
+
+            if (stack_peek(right, &pub2) == 0){
+                publication_free(&pub1);
+                container_destroy(temp);
+                return 0;
+            }
+
+            if (cmp(&pub1, &pub2) > 0) {
+                take_left = 1;
+            } else {
+                take_left = 0;
+            }
+
+            publication_free(&pub1);
+            publication_free(&pub2);
+        }
+
+        publication_t picked;
+
+        if (take_left != 0){
+            if (stack_pop_with_data(left, &picked) == 0){
+                container_destroy(temp);
+                return 0;
+            }
+        } else {
+            if (stack_pop_with_data(right, &picked) == 0){
+                container_destroy(temp);
+                return 0;
+            }
+        }
+
+        if (container_push(temp, &picked) == 0){
+            publication_free(&picked);
+            container_destroy(temp);
+            return 0;
+        }
+
+        publication_free(&picked);
+    }
+
+    container_clear(stack);
+
+    int success = stack_move_all(temp, stack);
+    container_destroy(temp);
+    return success;
+}
+
+static void sort_stack_merge(container_t* stack, comparator_t cmp){
+    if (stack == NULL || cmp == NULL){
+        return;
+    }
+
+    size_t n = container_size(stack);
+    if (n < 2) {
+        return;
+    }
+
+    container_t* left  = container_init();
+    container_t* right = container_init();
+
+    if (left == NULL || right == NULL){
+        if (left != NULL) {
+            container_destroy(left);
+        }
+        if (right != NULL) {
+            container_destroy(right);
+        }
+        return;
+    }
+
+    size_t half = n / 2;
+
+    for (size_t i = 0; i < half; i++){
+        publication_t tmp_pub;
+
+        if (stack_pop_with_data(stack, &tmp_pub) == 0){
+            break;
+        }
+
+        if (container_push(left, &tmp_pub) == 0){
+            publication_free(&tmp_pub);
+            break;
+        }
+
+        publication_free(&tmp_pub);
+    }
+
+    while (container_size(stack) > 0){
+        publication_t tmp_pub;
+
+        if (stack_pop_with_data(stack, &tmp_pub) == 0){
+            break;
+        }
+
+        if (container_push(right, &tmp_pub) == 0){
+            publication_free(&tmp_pub);
+            break;
+        }
+
+        publication_free(&tmp_pub);
+    }
+
+    sort_stack_merge(left, cmp);
+    sort_stack_merge(right, cmp);
+
+    merge_into_one(stack, left, right, cmp);
+
+    container_destroy(left);
+    container_destroy(right);
+}
