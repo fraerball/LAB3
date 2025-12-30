@@ -148,7 +148,7 @@ static void sort_stack_shaker(container_t* stack, comparator_t cmp){
         if (stack_move_all(stack, rev) == 0) {
             break;
         }
-        int pass_swapped = bubble_pass(rev, tmp, cmp, 1);
+        int pass_swapped = bubble_iteration(rev, tmp, cmp, 1);
         if (pass_swapped != 0) {
         swapped_any = 1;
         }
@@ -156,7 +156,7 @@ static void sort_stack_shaker(container_t* stack, comparator_t cmp){
         if (stack_move_all(rev, stack) == 0) {
             break;
         }
-        pass_swapped = bubble_pass(stack, tmp, cmp, 0);
+        pass_swapped = bubble_iteration(stack, tmp, cmp, 0);
         if (pass_swapped != 0) {
          swapped_any = 1;
         }
