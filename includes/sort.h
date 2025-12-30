@@ -9,6 +9,6 @@ typedef int (*comparator_t)(const void* publiication1, const void* publication2)
 typedef enum{
     SORT_METHOD_SHAKER,
     SORT_METHOD_MERGE,
-}sort_method_t;
+} sort_method_t;
 
-void sort(container_t* container, comparator_t cmp);
+void sort(container_t* container, comparator_t cmp, sort_method_t method);

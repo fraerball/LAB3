@@ -301,3 +301,14 @@ static void sort_stack_merge(container_t* stack, comparator_t cmp){
     container_destroy(left);
     container_destroy(right);
 }
+void sort(container_t* container, comparator_t cmp, sort_method_t method){
+    if (container == NULL || cmp == NULL) {
+        return;
+    }
+
+    if (method == SORT_METHOD_MERGE){
+        sort_stack_merge(container, cmp);
+    } else {
+        sort_stack_shaker(container, cmp);
+    }
+}
