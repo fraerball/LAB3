@@ -219,16 +219,13 @@ container_t* read_publications_csv(const char* filename) {
     }
     
     char line[1024];
-    int line_num = 0;
     
     fgets(line, sizeof(line), file);
     
     while (fgets(line, sizeof(line), file) != NULL) {
-        line_num++;
-        line[strcspn(line, "\n")] = '\0';
-        
-        publication_t publication;
-        memset(&publication, 0, sizeof(publication));
+
+        publication_t publication = {0};
+
         
         char* token = strtok(line, ",");
         int field = 0;
@@ -384,8 +381,7 @@ container_t* generate_random_publications(int quantity,
     srand((unsigned)time(NULL));
     
     for (int i = 0; i < quantity; i++) {
-        publication_t publication;
-        memset(&publication, 0, sizeof(publication));
+        publication_t publication = {0};
         
         publication.title_publication = copy_string(
             publications[rand() % publications_quantity]);
@@ -407,7 +403,7 @@ container_t* generate_random_publications(int quantity,
         }
         
         publication_free(&publication);
-        
+
     }
     
     return container;
